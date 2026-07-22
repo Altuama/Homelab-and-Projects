@@ -19,7 +19,7 @@ A small enterprise topology built to practice dual-stack (IPv4/IPv6) addressing,
 PC → CORE → (dual redundant links) → EDGE → WAN cloud → TFTP server
 ```
 
-![Network Topology](./Figures/Topology.png)
+![[Topology.png]]
 
 ### Addressing Scheme
 
@@ -364,7 +364,6 @@ This captures show command output directly to a file on the TFTP server without 
 
 ---
 
-**Environment:** [Physical Hardware]
-**College:** Algonquin College
+**Environment:** [GNS3 / EVE-NG / Physical Hardware]
 
 ---

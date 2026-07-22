@@ -3,12 +3,12 @@
 Hi, my name is Wayne Altuama. I'm a recent Algonquin College graduate and a Computer Systems and Networking Technician, and this repo documents the home lab Im building to practice the skills ive developed while garnering new skills.
 # Homelab Projects
 
-| Project                                                               | Stack                                            |
-| --------------------------------------------------------------------- | ------------------------------------------------ |
-| [Proxmox Virtualization Server Setup](Proxmox-Cluster.md)             | Proxmox VE                                       |
-| VirtualBox to Proxmox VM Migration                                       | Proxmox, VirtualBox, VBoxManage                  |
-| [Self-Hosted Obsidian Vault Sync](Self-Hosted-Obsidian-Vault-Sync.md) | CouchDB, Self-hosted LiveSync, Tailscale, Docker |
-| [2-Node Proxmox Cluster](Proxmox-Cluster.md)                          | Proxmox VE                                       |
+| Project                                                                               | Stack                                            |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [Proxmox Virtualization Server Setup](Proxmox-Cluster.md)                             | Proxmox VE                                       |
+| [VirtualBox to Proxmox VM Migration](./Proxmox/VirtualBox-to-Proxmox-VM-Migration.md) | Proxmox, VirtualBox, VBoxManage                  |
+| [Self-Hosted Obsidian Vault Sync](Self-Hosted-Obsidian-Vault-Sync.md)                 | CouchDB, Self-hosted LiveSync, Tailscale, Docker |
+| [2-Node Proxmox Cluster](Proxmox-Cluster.md)                                          | Proxmox VE                                       |
 ### The Lab
 
 | Host                            | Role                       | Specs                                               |

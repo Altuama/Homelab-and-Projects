@@ -217,13 +217,13 @@ Use the plugin's built-in tools to optimize the connection:
 
 ## Key Commands Reference
 
-| Command | Purpose |
-|---------|---------|
-| `sudo docker ps \| grep couchdb` | Check if CouchDB container is running |
-| `sudo docker logs couchdb-for-ols` | View container logs for troubleshooting |
-| `sudo docker restart couchdb-for-ols` | Restart the CouchDB container |
-| `curl http://localhost:5984/obsidian` | Test database connectivity |
-| `tailscale status` | Verify Tailscale is running |
+| Command                                          | Purpose                                     |
+| ------------------------------------------------ | ------------------------------------------- |
+| `sudo docker ps \| grep couchdb`                 | Check if CouchDB container is running       |
+| `sudo docker logs couchdb-for-ols`               | View container logs for troubleshooting     |
+| `sudo docker restart couchdb-for-ols`            | Restart the CouchDB container               |
+| `curl http://localhost:5984/obsidian`            | Test database connectivity                  |
+| `tailscale status`                               | Verify Tailscale is running                 |
 | `cloudflared tunnel --url http://localhost:5984` | Create temporary tunnel (run in background) |
 
 ---
