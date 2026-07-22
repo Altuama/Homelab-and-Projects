@@ -17,11 +17,11 @@ All hosts sit behind Tailscale, no ports forwarded to the internet.
 
 | Project                             | Status   | Stack                                            |
 | ----------------------------------- | -------- | ------------------------------------------------ |
-| [Proxmox Virtualization Server Setup](./Proxmox/Proxmox-Virtualization-Server-Setup.md) | Complete | Proxmox VE                                       |
+| [Proxmox Virtualization Server Setup](./Proxmox/Proxmox-Cluster.md) | Complete | Proxmox VE                                       |
 | VirtualBox to Proxmox Migration     | Complete | Proxmox, VirtualBox                              |
 | Self-Hosted Obsidian Vault Sync     | Complete | CouchDB, Self-hosted LiveSync, Tailscale, Docker |
 | VirtualBox to Proxmox VM Migration  | Complete | VirtualBox, VBoxManage, Proxmox                  |
-| 2-Node Proxmox Cluster              | Complete | Proxmox VE                                       |
+| [2-Node Proxmox Cluster](./Proxmox/Proxmox-Cluster.md)              | Complete | Proxmox VE                                       |
 
 ## Roadmap
 
