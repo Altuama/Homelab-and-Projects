@@ -364,6 +364,7 @@ This captures show command output directly to a file on the TFTP server without 
 
 ---
 
-**Environment:** [GNS3 / EVE-NG / Physical Hardware]
+**Environment:** [Physical Hardware]
+**College:** Algonquin College
 
 ---
