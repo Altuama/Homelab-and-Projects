@@ -15,71 +15,64 @@ A comprehensive Linux server infrastructure lab featuring multiple network servi
 
 ---
 
+## Table of Contents
+
+- [Architecture & Network Topology](#architecture--network-topology)
+- [Environment](#environment)
+- [Implementation Phases](#implementation-phases)
+- [Verification Summary](#verification-summary)
+- [Key Takeaways](#key-takeaways)
+- [Troubleshooting Reference](#troubleshooting-reference)
+- [Completion Checklist](#completion-checklist)
+- [Corrections Made During Review](#corrections-made-during-review)
+
+---
+
 ## Architecture & Network Topology
 
+```mermaid
+flowchart LR
+    subgraph SERVER["SERVER (single host)"]
+        SVCS["SSH, DNS, Samba, NFS"]
+    end
+
+    N30["30.x - Server's own net<br/>172.16.30.0/24"]
+    N31["31.x - Client net<br/>172.16.31.0/24"]
+    N32["32.x - Alias net<br/>172.16.32.0/24"]
+    CLIENT["Client<br/>172.16.31.110"]
+
+    N30 <-->|"NFS: read-only<br/>everything else: blocked"| SERVER
+    N31 <-->|"SSH, DNS, Samba: allowed<br/>NFS: read-write"| SERVER
+    N32 <-->|"everything: blocked"| SERVER
+    CLIENT --- N31
 ```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│                                                                              │
-│                            ┌─────────────────────┐                           │
-│                            │   SERVER            │                           │
-│                            │   172.16.30.110     │                           │
-│                            │   172.16.32.110     │                           │
-│                            │                     │                           │
-│                            │  ┌───────────────┐  │                           │
-│                            │  │  Services:    │  │                           │
-│                            │  │  - SSH        │  │                           │
-│                            │  │  - DNS        │  │                           │
-│                            │  │  - Samba      │  │                           │
-│                            │  │  - NFS        │  │                           │
-│                            │  └───────────────┘  │                           │
-│                            └──────────┬──────────┘                           │
-│                                       │                                      │
-│                    ┌──────────────────┼──────────────────┐                   │
-│                    │                  │                  │                   │
-│                    ▼                  ▼                  ▼                   │
-│           ┌───────────────┐  ┌───────────────┐  ┌───────────────┐            │
-│           │  30.x Network │  │  31.x Network │  │  32.x Network │            │
-│           │  (Server Net) │  │  (Client Net) │  │  (Alias Net)  │            │
-│           │               │  │               │  │               │            │
-│           │  172.16.30.0  │  │  172.16.31.0  │  │  172.16.32.0  │            │
-│           │   /24         │  │   /24         │  │   /24         │            │
-│           │               │  │               │  │               │            │
-│           │  ┌─────────┐  │  │  ┌─────────┐  │  │  ┌─────────┐  │            │
-│           │  │ Client  │  │  │  │ Client  │  │  │  │ Client  │  │            │
-│           │  │ (Test)  │  │  │  │ (Test)  │  │  │  │ (Test)  │  │            │
-│           │  └─────────┘  │  │  └─────────┘  │  │  └─────────┘  │            │
-│           └───────────────┘  └───────────────┘  └───────────────┘            │
-│                                                                              │
-│  ┌──────────────────────────────────────────────────────────────────┐        │
-│  │                       Service Access Matrix                      │        │
-│  │  ┌────────────────┬─────────────┬─────────────┬─────────────┐    │        │
-│  │  │     Service    │  30.x Net   │  31.x Net   │  32.x Net   │    │        │
-│  │  ├────────────────┼─────────────┼─────────────┼─────────────┤    │        │
-│  │  │     SSH        │    BLOCKED  │   ALLOWED   │    BLOCKED  │    │        │
-│  │  │     DNS        │    BLOCKED  │   ALLOWED   │    BLOCKED  │    │        │
-│  │  │    Samba       │    BLOCKED  │   ALLOWED   │    BLOCKED  │    │        │
-│  │  │     NFS        │  READ-ONLY  │  READ-WRITE │    BLOCKED  │    │        │
-│  │  └────────────────┴─────────────┴─────────────┴─────────────┘    │        │
-│  └──────────────────────────────────────────────────────────────────┘        │
-│                                                                              │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
+
+> **Addressing note:** the three "networks" above are logical, firewall-enforced zones rather than separate routed subnets. Both `01_server_base.sh` and `02_client_base.sh` configure their interfaces with `PREFIX=16` (172.16.0.0/16), and no gateway or router config appears anywhere in this lab — that makes 30.x/31.x/32.x one flat broadcast domain with segmentation enforced entirely by iptables, not three independently-routed `/24`s. If real L3-separated subnets were actually intended, the interfaces would need `/24` masks plus a router or L3 switch between them. See [Corrections](#corrections-made-during-review).
+
+### Service Access Matrix
+
+| Service | 30.x Net (Server) | 31.x Net (Client) | 32.x Net (Alias) |
+| :------ | :----------------- | :------------------ | :----------------- |
+| SSH | Blocked | Allowed | Blocked |
+| DNS | Blocked | Allowed | Blocked |
+| Samba | Blocked | Allowed | Blocked |
+| NFS | Read-only | Read-write | Blocked |
 
 ---
 
 ## Environment
 
-| Component | Specification |
-| :-------- | :------------ |
-| **Server OS** | Rocky Linux / CentOS / RHEL (systemd-based) |
-| **Server Hostname** | `server.orange.lab` |
-| **Server IP (Main)** | `172.16.30.110` |
-| **Server IP (Alias)** | `172.16.32.110` |
-| **Client OS** | Rocky Linux / CentOS / RHEL |
-| **Client IP** | `172.16.31.110` |
-| **Domain** | `orange.lab` |
-| **Firewall** | iptables (strict default DROP policy) |
-| **SELinux** | Permissive (lab environment) |
+| Component             | Specification                         |
+| :-------------------- | :------------------------------------ |
+| **Server OS**         | RHEL                                  |
+| **Server Hostname**   | `server.orange.lab`                   |
+| **Server IP (Main)**  | `172.16.30.110`                       |
+| **Server IP (Alias)** | `172.16.32.110`                       |
+| **Client OS**         | RHEL                                  |
+| **Client IP**         | `172.16.31.110`                       |
+| **Domain**            | `orange.lab`                          |
+| **Firewall**          | iptables (strict default DROP policy) |
+| **SELinux**           | Permissive (lab environment)          |
 
 ---
 
@@ -151,6 +144,7 @@ iptables -P OUTPUT ACCEPT
 # Essential rules
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -p icmp -s 172.16.31.0/24 -j ACCEPT
 
 # EXPLICIT BLOCK RULES
 iptables -A INPUT -s 172.16.30.0/24 -j DROP
@@ -228,11 +222,22 @@ SSH is configured to allow only `root` and `test` users. The firewall permits SS
 ```bash
 #!/bin/bash
 
+# Create a valid-but-unauthorized user so the negative test below
+# actually proves AllowUsers is doing the blocking, rather than
+# failing simply because the account doesn't exist
+if ! getent passwd cst8246 > /dev/null; then
+    useradd cst8246
+    echo "x" | passwd --stdin cst8246
+fi
+
 # Configure SSH to allow only root and test
 sed -i '/AllowUsers/d' /etc/ssh/sshd_config
 echo "AllowUsers root test" >> /etc/ssh/sshd_config
 
-# Enable key authentication
+# Enable key authentication, and leave password auth on too --
+# ssh-copy-id in the client script needs password auth for the
+# initial bootstrap; the actual pass/fail tests use BatchMode=yes
+# to force key-only auth regardless
 sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
@@ -254,7 +259,7 @@ echo "Firewall: Port 22 open for 172.16.31.0/24"
 | :--- | :------------ |
 | `root` | ✅ Allowed (key-based) |
 | `test` | ✅ Allowed (key-based) |
-| `cst8246` | ❌ Blocked |
+| `cst8246` | ❌ Blocked (exists, but not in `AllowUsers`) |
 | Other users | ❌ Blocked |
 
 **SSH Client Testing (`04_client_ssh.sh`):**
@@ -388,6 +393,10 @@ echo "DNS setup complete"
 SERVER="172.16.30.110"
 
 # Set DNS server
+# Note: 192.168.101.2 doesn't fit the 172.16.30/31/32.x scheme used
+# elsewhere in this lab -- confirm it's a real fallback resolver for
+# your environment (e.g. a hypervisor management network) before
+# reusing this script, or drop the line if it isn't applicable.
 cat > /etc/resolv.conf << EOF
 nameserver $SERVER
 nameserver 192.168.101.2
@@ -448,6 +457,8 @@ service iptables save
 
 echo "Samba setup complete"
 ```
+
+> **Lab-only shortcut:** `chmod 777 /srv/samba` makes the share directory world-writable at the filesystem level, same spirit as the SSH password note above — fine for a test bench, not something to carry into production, where you'd scope this to the Samba group/user instead.
 
 **Samba Access Matrix:**
 
@@ -565,6 +576,8 @@ MOUNT_POINT="/mnt/nfs_test"
 
 echo "--- NFS Client Test (31.x network - Should be RW) ---"
 
+mkdir -p $MOUNT_POINT
+
 # Mount NFS share
 mount -t nfs $SERVER:/srv/nfs $MOUNT_POINT
 
@@ -630,7 +643,7 @@ echo "Client (31.x network): Read/Write access verified ✓"
 | :------ | :----- | :----- |
 | 172.16.31.110 (Client) | Read/Write | ✅ PASS |
 | 172.16.30.110 (Server) | Read-Only | ✅ PASS |
-| 172.16.32.0/24 | Blocked | ✅ PASS (firewall) |
+| 172.16.32.0/24 | Blocked | ⚠️ Asserted, not exercised by a script here — see Corrections |
 
 ---
 
@@ -639,8 +652,9 @@ echo "Client (31.x network): Read/Write access verified ✓"
 | Concept | Lesson |
 | :------ | :----- |
 | **Default DROP Firewall** | Starting with DROP all and selectively allowing services provides the most secure foundation |
+| **ICMP isn't special-cased** | A default-DROP policy blocks ping just like any other traffic — explicitly allow it if connectivity testing depends on it |
 | **Firewall Rule Order** | Insert rules at the correct position (`-I`) to override general DROP rules |
-| **SSH User Restrictions** | `AllowUsers` directive in sshd_config provides simple user-based access control |
+| **SSH User Restrictions** | `AllowUsers` provides simple user-based access control — but the account still needs to exist for a negative test to prove anything |
 | **Samba Permissions** | `write list` and `read only` provide granular user-level access control |
 | **NFS Export Options** | `rw` vs `ro` provides network-based access control without complex client configuration |
 | **DNS Recursion** | Restrict recursion to trusted networks to prevent DNS amplification attacks |
@@ -653,6 +667,7 @@ echo "Client (31.x network): Read/Write access verified ✓"
 
 | Issue | Likely Cause | Fix |
 | :---- | :----------- | :-- |
+| Ping fails between hosts even though services work | ICMP not explicitly permitted through the firewall | Add an `iptables -A INPUT -p icmp ... -j ACCEPT` rule for the relevant source |
 | SSH connection timeout | Firewall rule missing or incorrect position | Verify rule is before DROP rules with `iptables -L INPUT --line-numbers` |
 | SSH user denied | User not in `AllowUsers` list | Check `/etc/ssh/sshd_config` and restart sshd |
 | DNS resolution fails | Zone file syntax error | Check BIND logs: `journalctl -u named` |
@@ -671,6 +686,7 @@ echo "Client (31.x network): Read/Write access verified ✓"
 - [x] Alias IP (172.16.32.110) configured
 - [x] test user created with password `sba`
 - [x] Strict firewall: default DROP policy
+- [x] ICMP allowed from 172.16.31.0/24 (needed for connectivity testing)
 - [x] 30.0/24 and 32.0/24 explicitly blocked
 
 **Phase 2: Client Base**
@@ -680,8 +696,9 @@ echo "Client (31.x network): Read/Write access verified ✓"
 
 **Phase 3: SSH**
 - [x] AllowUsers: root, test only
+- [x] `cst8246` created as a valid-but-unauthorized account for negative testing
 - [x] Pubkey authentication enabled
-- [x] Password authentication enabled
+- [x] Password authentication enabled (for ssh-copy-id bootstrap only)
 - [x] Firewall allows SSH from 31.0/24 only
 
 **Phase 4: DNS**
@@ -705,6 +722,7 @@ echo "Client (31.x network): Read/Write access verified ✓"
 - [x] 31.0/24: rw; 30.0/24: ro
 - [x] All required ports (111, 2049, 20048, 32769, 32803) open
 - [x] Self-test verifies RO access from server
+- [x] Client-side mount point created before mounting
 
 **Client Verification**
 - [x] SSH tests passed
