@@ -33,77 +33,17 @@ _All hosts sit behind Tailscale, no ports forwarded to the internet._
 
 ## Skills Demonstrated
 
-**Virtualization & Infrastructure**
-
-- Proxmox VE deployment and administration (2-node cluster with HA)  
-- Virtual machine lifecycle management (creation, migration, backup)
-- VirtualBox to Proxmox migration using `VBoxManage` and Proxmox import tools
-- Docker containerization (CouchDB deployment via Docker Compose)
-- Resource allocation and optimization (CPU, RAM, storage)
-- Hardware selection and capacity planning
-
-**Networking & Routing**
-
-- Tailscale VPN configuration (subnet routing, MagicDNS, HTTPS certificates)
-- Cisco IOS routing and switching (OSPFv2 multi-area, BGPv4 peering)
-- IPv4/IPv6 dual-stack implementation
-- Routing protocol tuning (reference bandwidth, cost manipulation, timers)
-- Route summarization and redistribution
-- Redundancy implementation (floating static routes, dynamic failover)
-- Enterprise switching (RSTP, VLANs, VTPv2, LACP EtherChannel)
-- Trunk links and VLAN segmentation
-
-**Systems Administration - Windows**
-
-- Windows Server 2022 deployment and configuration (physical/virtual)
-- Active Directory Domain Services (multi-forest design, OUs, users, groups)
-- DNS Server configuration (forward/reverse zones, conditional forwarders, MX records)    
-- Exchange Server 2019 installation and administration
-- Mailbox management (databases, enabling users, email address policies)
-- Cross-domain mail flow configuration
-- IMAP4/POP3 service configuration for third-party clients
-- OWA and client-based mail testing (Thunderbird)
-
-**Systems Administration - Linux**
-
-- RHEL-based Linux server administration
-- BIND DNS server deployment (forward/reverse zones, recursion control)
-- NFS server configuration (network-based access control, RO vs. RW exports)
-- Samba file server deployment (user-level permissions, read-only vs. read-write)
-- SSH server hardening (user restrictions, key-based authentication)
-- iptables firewall management (default DROP policies, per-service access rules)
-- Bash scripting for automation and deployment
-- Package management and service administration (systemd)
-- SELinux configuration (permissive/enforcing modes)
-
-**Security Operations & Threat Analysis**
-
-- Security Onion deployment and configuration
-- Alert triage and event correlation using Sguil
-- Log visualization and filtering with Kibana
-- Packet capture analysis using Wireshark
-- Host identification and OS fingerprinting with NetworkMiner
-- File extraction from HTTP traffic
-- Cryptographic hash generation (SHA1, SHA256, SHA512)
-- Threat intelligence verification using VirusTotal
-- MITRE ATT&CK framework mapping (tactics and techniques)
-- Indicator of Compromise (IOC) identification and documentation
-
-**Network Security**
-
-- Strict firewall policy implementation (default DROP, per-service allow)
-- Network segmentation and access control
-- SSH encryption and authentication hardening
-- Port security and access port configuration
-
-**Tools & Methodologies**
-
-- Cisco Packet Tracer for network simulation
-- VMware/VirtualBox for virtualization
-- Incident investigation methodology
-- Threat intelligence gathering
-- Technical documentation and report writing
-- Command-line proficiency (Linux, Windows PowerShell, Cisco IOS)
+| Category                                  | Key Skills                                                                                                                                                                                                                                                               |
+| :---------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Virtualization & Infrastructure**       | Proxmox VE deployment & 2-node clustering · VM lifecycle management (create/migrate/backup) · VirtualBox → Proxmox migration (`VBoxManage`) · Docker & Docker Compose · TrueNAS/ZFS storage design (NFS/SMB/iSCSI) · Hardware selection & capacity planning              |
+| **Networking & Routing**                  | Cisco IOS routing/switching (multi-area OSPFv2, BGPv4, RSTP, VTPv2, LACP EtherChannel) · IPv4/IPv6 dual-stack · Route summarization, redistribution & floating static routes · Tailscale & WireGuard VPN (subnet routing, site-to-site) · VLAN segmentation & DMZ design |
+| **Windows Systems Administration**        | Windows Server 2019/2022 deployment · Active Directory (multi-forest, OUs, users/groups) · DNS (zones, conditional forwarders, MX) · Exchange Server 2019 (mailboxes, cross-domain mail flow) · DFS Namespace/Replication · OWA / IMAP / POP3 client access              |
+| **Linux Systems Administration**          | RHEL & Ubuntu server administration · BIND DNS · NFS & Samba file services · OpenLDAP directory services · GlusterFS replicated storage · SSH hardening & iptables firewalling · Bash scripting & systemd · SELinux configuration                                        |
+| **Security Operations & Threat Analysis** | Security Onion, Sguil, Kibana · Wireshark packet analysis · NetworkMiner host/OS fingerprinting · VirusTotal threat intel verification · MITRE ATT&CK mapping · IOC identification & documentation                                                                       |
+| **Network Security**                      | Default-DROP firewall policy design · Network segmentation & access control · SSH/port security hardening · Stateful firewall rules (OPNsense/pfSense)                                                                                                                   |
+| **Backup & Disaster Recovery**            | Veeam Backup & Replication job design · Off-site repository replication (3-2-1 strategy) · Config backup via TFTP                                                                                                                                                        |
+| **IT Service Management**                 | Spiceworks Cloud Helpdesk deployment · Multi-tenant, branded ticketing portals · Email-verified authentication & ticket lifecycle management                                                                                                                             |
+| **Tools & Methodologies**                 | Cisco Packet Tracer · VMware/VirtualBox · Incident investigation methodology · Technical documentation & report writing · CLI proficiency (Linux, Windows PowerShell, Cisco IOS)                                                                                         |
 
 ## Contact
 
