@@ -404,16 +404,6 @@ This captures show command output directly to a file on the TFTP server without 
 
 ---
 
-## Corrections Made During Review
-
-1. **`default-information originate` was on the wrong router.** It appeared under CORE's OSPF process, but CORE has no default route of its own — only EDGE does. Moved it to EDGE's OSPF process, where the static default route actually lives. As originally written, CORE also wouldn't have been able to reach the TFTP server in Section 7, since that route is CORE's only path outside the internal address space.
-2. **EDGE's OSPF process block wasn't shown explicitly.** Added it alongside CORE's for symmetry (router ID `10.13.100.1`, matching EDGE's loopback).
-3. **`traceroute` for IPv6 destinations now uses the explicit `ipv6` keyword**, matching the convention already used for `ping ipv6 <address>` elsewhere in the doc.
-4. **IPv6 failover troubleshooting row reworded.** The original hedge ("AD 130 may not be high enough if primary AD > 130") describes a scenario that can't actually happen here, since the primary static route uses the default AD of 1. Replaced with the failure mode that applies in this lab.
-5. **Completion checklist boxes checked.** They were all unchecked despite the write-up describing every item as implemented — uncheck anything that isn't actually done yet.
-
----
-
 **Environment:** [Physical Hardware]
 
 ---
